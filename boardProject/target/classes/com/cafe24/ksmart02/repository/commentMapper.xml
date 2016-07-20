@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cafe24.ksmart02.repository.commentMapper">
+	<select id="selectCommentList"
+			parameterType="java.util.Map"
+            resultType="com.cafe24.ksmart02.model.Comment">
+		SELECT 
+			comment_no as commentNo,
+			article_no as articleNo,
+			comment_content as commentContent,
+			comment_writer as commentWriter,
+			comment_date as commentDate			
+		FROM 
+			comment
+		
+		WHERE
+			article_no = #{articleNo}
+		ORDER BY 
+			comment_date desc
+		LIMIT
+			#{pageHelper.listOne},#{pageHelper.limitList}
+	</select>
+	<select id="selectCommentListCount"
+			parameterType="int"
+			resultType="integer">
+		SELECT
+			count(*)
+		FROM
+			comment
+		WHERE
+			article_no = #{commentNo}
+	</select>
+	
+	<select id="selectCommentPw"
+			parameterType="int"
+			resultType="com.cafe24.ksmart02.model.Comment">
+		SELECT
+			comment_no as commentNo,
+			comment_pw as commentPw
+		FROM
+			comment
+		WHERE
+			comment_no = #{commentNo}
+	</select>
+	
+	<insert id="insertComment"
+		parameterType="com.cafe24.ksmart02.model.Comment">
+		INSERT INTO 
+			comment
+			(article_no, comment_content, comment_writer, comment_pw, comment_date)
+		VALUES 
+			(#{articleNo}, #{commentContent}, #{commentWriter}, #{commentPw}, NOW())
+	</insert>
+	
+	<update id="updateComment"
+		parameterType="com.cafe24.ksmart02.model.Comment">
+		UPDATE 
+			comment
+		SET
+			comment_content = #{commentContent}
+		WHERE
+			comment_no = #{commentNo}
+	</update>
+	
+	<delete id="deleteComment"
+		parameterType="int">
+		DELETE FROM
+			comment
+		WHERE
+			comment_no = #{commentNo}
+	</delete>
+	<delete id="deleteArticleComment"
+		parameterType="int">
+		DELETE FROM
+			comment
+		WHERE
+			article_no = #{articleNo}
+	</delete>
+	
+	
+</mapper>
